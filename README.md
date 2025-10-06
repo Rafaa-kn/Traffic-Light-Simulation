@@ -1,5 +1,3 @@
-
-markdown
 # 🚦 Program Simulasi Lampu Lalu Lintas 4-Arah (Straight-Only)
 
 Program ini mensimulasikan **sistem lampu lalu lintas 4 arah (Utara, Timur, Selatan, Barat)** menggunakan Python dan **Tkinter**.  
@@ -29,7 +27,7 @@ Tampilan utama berisi:
 ## ⚙️ Instalasi dan Cara Menjalankan
 
 ### 1. Clone repositori
-bash
+```bash
 git clone https://github.com/username/nama-repo.git
 cd nama-repo
 
