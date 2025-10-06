@@ -29,8 +29,8 @@ Tampilan utama berisi:
 ### 1. Clone repositori
 
 ```bash
-git clone https://github.com/username/nama-repo.git
-cd nama-repo
+git clone https://github.com/Rafaa-kn/Traffic-Light-Simulation.git
+cd Traffic-Light-Simulation
 ```
 
 ### 2. Pastikan Python sudah terinstal
