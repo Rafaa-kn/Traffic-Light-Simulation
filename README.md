@@ -1,8 +1,3 @@
-Berikut contoh **README.md** untuk versi terbaru program simulasi lampu lalu lintas ini, di mana **belokan mobil dihilangkan** dan semua mobil bergerak lurus:
-
----
-
-````markdown
 # 🚦 Program Simulasi Lampu Lalu Lintas 4-Arah (Straight-Only)
 
 Program ini mensimulasikan **sistem lampu lalu lintas 4 arah (Utara, Timur, Selatan, Barat)** menggunakan Python dan **Tkinter**.  
@@ -35,7 +30,7 @@ Tampilan utama berisi:
 ```bash
 git clone https://github.com/username/nama-repo.git
 cd nama-repo
-````
+
 
 ### 2. Pastikan Python sudah terinstal
 
