@@ -1,3 +1,5 @@
+
+markdown
 # 🚦 Program Simulasi Lampu Lalu Lintas 4-Arah (Straight-Only)
 
 Program ini mensimulasikan **sistem lampu lalu lintas 4 arah (Utara, Timur, Selatan, Barat)** menggunakan Python dan **Tkinter**.  
@@ -27,7 +29,7 @@ Tampilan utama berisi:
 ## ⚙️ Instalasi dan Cara Menjalankan
 
 ### 1. Clone repositori
-```bash
+bash
 git clone https://github.com/username/nama-repo.git
 cd nama-repo
 
@@ -117,19 +119,8 @@ Proyek ini bersifat **open-source** dan dapat digunakan untuk keperluan belajar 
 
 ## ✨ Kontributor
 
-Dibuat oleh **[Nama Kamu]**
+Dibuat oleh **Rado Faristra Amsah**
 Sebagai proyek simulasi lalu lintas berbasis Python dengan mobil bergerak lurus.
 
 ```
 
----
-
-Kalau mau, aku bisa buatkan **versi README “perbandingan versi”** yang menjelaskan tiga versi:  
-1. Mobil belok normal  
-2. Mobil belok halus (Bezier)  
-3. Mobil hanya lurus  
-
-Ini akan sangat berguna untuk repositori agar pengunjung cepat memahami evolusi simulasi.  
-
-Apakah mau aku buatkan versi itu juga?
-```
