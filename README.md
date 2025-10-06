@@ -27,16 +27,18 @@ Tampilan utama berisi:
 ## ⚙️ Instalasi dan Cara Menjalankan
 
 ### 1. Clone repositori
+
 ```bash
 git clone https://github.com/username/nama-repo.git
 cd nama-repo
-
+```
 
 ### 2. Pastikan Python sudah terinstal
 
 Program ini menggunakan **Python 3.x** dan modul bawaan **Tkinter**.
 
 Cek versi Python:
+
 
 ```bash
 python --version
@@ -120,5 +122,4 @@ Proyek ini bersifat **open-source** dan dapat digunakan untuk keperluan belajar 
 Dibuat oleh **Rado Faristra Amsah**
 Sebagai proyek simulasi lalu lintas berbasis Python dengan mobil bergerak lurus.
 
-```
 
