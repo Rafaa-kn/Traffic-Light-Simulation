@@ -14,7 +14,7 @@ CLR_CAR  = ["#070f7e", "#db349e", "#8318B1", "#f1c40f", "#9b59b6", "#9f032a"]  #
 # Durasi waktu lampu lalu lintas (dalam detik)
 PHASES   = {"green": 10, "yellow": 2, "red": 12}
 LANE_WIDTH = 120          # lebar satu jalur arah
-INTERP_STEPS = 20         # smoothness belokan
+INTERP_STEPS = 0          # turning is eliminated
 
 class TrafficLightGUI:
     def __init__(self, root):
@@ -161,19 +161,10 @@ class TrafficLightGUI:
         self.update_lights_display()
 
     # ---------- Fungsi-fungsi untuk mengatur mobil ----------
-    def get_turn_vector(self, tgt):
-        """
-        Mendapatkan vektor arah belokan berdasarkan tujuan
-        Mengembalikan arah gerakan x dan y berdasarkan arah tujuan
-        """
-        return {"Utara": (0, 1), "Timur": (-1, 0),
-                "Selatan": (0, -1), "Barat": (1, 0)}[tgt]
-
     def spawn_car(self):
         """
         Fungsi untuk membuat mobil baru di ujung jalan secara acak
-        Mobil dipilih dari arah acak dan akan bergerak menuju tujuan acak
-        (belok kiri, kanan, atau lurus)
+        Mobil dipilih dari arah acak dan akan bergerak lurus
         """
         now = time.monotonic()
         if now - self.spawn_timer < 2.5 or len(self.cars) >= 16:
@@ -184,33 +175,26 @@ class TrafficLightGUI:
         color = random.choice(CLR_CAR)
         speed = self.speed_var.get() * random.uniform(0.8, 1.2)
 
-        turn = random.choices(["left", "straight", "right"],
-                              weights=[0.25, 0.5, 0.25])[0]
-
+        # Only go straight
         idx = self.dirs.index(src)
-        if turn == "left":
-            tgt = self.dirs[(idx + 1) % 4]
-        elif turn == "right":
-            tgt = self.dirs[(idx - 1) % 4]
-        else:
-            tgt = self.dirs[(idx + 2) % 4]
+        tgt = self.dirs[(idx + 2) % 4]  # Go straight (opposite direction)
 
         lane_offset = -60 if src in ("Utara", "Timur") else 60
         if src == "Utara":
-            y_spawn, x_lane = (-20, self.center_x + lane_offset) if tgt != "Utara" else (-20, self.center_x - lane_offset)
-            car = {"x": x_lane, "y": y_spawn, "dx": 0, "dy": 1, "dir": src, "target_dir": tgt,
+            y_spawn, x_lane = (-20, self.center_x + lane_offset)
+            car = {"x": float(x_lane), "y": float(y_spawn), "dx": 0, "dy": 1, "dir": src, "target_dir": tgt,
                    "color": color, "speed": speed, "state": "straight", "step": 0}
         elif src == "Timur":
-            x_spawn, y_lane = (self.canvas_w + 20, self.center_y + lane_offset) if tgt != "Timur" else (self.canvas_w + 20, self.center_y - lane_offset)
-            car = {"x": x_spawn, "y": y_lane, "dx": -1, "dy": 0, "dir": src, "target_dir": tgt,
+            x_spawn, y_lane = (self.canvas_w + 20, self.center_y + lane_offset)
+            car = {"x": float(x_spawn), "y": float(y_lane), "dx": -1, "dy": 0, "dir": src, "target_dir": tgt,
                    "color": color, "speed": speed, "state": "straight", "step": 0}
         elif src == "Selatan":
-            y_spawn, x_lane = (self.canvas_h + 20, self.center_x + lane_offset) if tgt != "Selatan" else (self.canvas_h + 20, self.center_x - lane_offset)
-            car = {"x": x_lane, "y": y_spawn, "dx": 0, "dy": -1, "dir": src, "target_dir": tgt,
+            y_spawn, x_lane = (self.canvas_h + 20, self.center_x + lane_offset)
+            car = {"x": float(x_lane), "y": float(y_spawn), "dx": 0, "dy": -1, "dir": src, "target_dir": tgt,
                    "color": color, "speed": speed, "state": "straight", "step": 0}
         else:  # Barat
-            x_spawn, y_lane = (-20, self.center_y + lane_offset) if tgt != "Barat" else (-20, self.center_y - lane_offset)
-            car = {"x": x_spawn, "y": y_lane, "dx": 1, "dy": 0, "dir": src, "target_dir": tgt,
+            x_spawn, y_lane = (-20, self.center_y + lane_offset)
+            car = {"x": float(x_spawn), "y": float(y_lane), "dx": 1, "dy": 0, "dir": src, "target_dir": tgt,
                    "color": color, "speed": speed, "state": "straight", "step": 0}
 
         car["item"] = self.canvas.create_rectangle(
@@ -257,22 +241,10 @@ class TrafficLightGUI:
     def move_cars(self):
         """
         Memindahkan semua mobil sesuai dengan arah dan kecepatannya
-        Fungsi ini juga menangani belokan mobil saat melewati persimpangan
+        Sekarang hanya mendukung pergerakan lurus
         """
         for car in self.cars[:]:
-            if car["state"] == "turning":
-                if car["step"] < INTERP_STEPS:
-                    t = car["step"] / INTERP_STEPS
-                    x = car["turn_start_x"] + t * (car["turn_end_x"] - car["turn_start_x"])
-                    y = car["turn_start_y"] + t * (car["turn_end_y"] - car["turn_start_y"])
-                    self.canvas.coords(car["item"], x-15, y-15, x+15, y+15)
-                    car["step"] += 1
-                    continue
-                else:
-                    car["state"] = "straight"
-                    car["dx"], car["dy"] = car["final_dx"], car["final_dy"]
-                    car["x"], car["y"] = car["turn_end_x"], car["turn_end_y"]
-
+            # Turn behavior is removed - only straight movement is supported
             if self.should_stop(car) or self.car_ahead(car):
                 continue
 
@@ -282,30 +254,7 @@ class TrafficLightGUI:
                                car["x"] - 15, car["y"] - 15,
                                car["x"] + 15, car["y"] + 15)
 
-            # cek belok
-            if car["target_dir"] != car["dir"] and car["state"] == "straight":
-                dist = abs(car["x"] - self.center_x) + abs(car["y"] - self.center_y)
-                if dist < 20:
-                    car["state"] = "turning"
-                    car["step"] = 0
-                    car["turn_start_x"] = car["x"]
-                    car["turn_start_y"] = car["y"]
-                    car["final_dx"], car["final_dy"] = self.get_turn_vector(car["target_dir"])
-                    # titik akhir belok
-                    if car["target_dir"] == "Utara":
-                        car["turn_end_x"], car["turn_end_y"] = car["x"], car["y"] + 30
-                    elif car["target_dir"] == "Timur":
-                        car["turn_end_x"], car["turn_end_y"] = car["x"] - 30, car["y"]
-                    elif car["target_dir"] == "Selatan":
-                        car["turn_end_x"], car["turn_end_y"] = car["x"], car["y"] - 30
-                    elif car["target_dir"] == "Barat":
-                        car["turn_end_x"], car["turn_end_y"] = car["x"] + 30, car["y"]
-
-            margin = 30
-            if (car["x"] < -margin or car["x"] > self.canvas_w + margin or
-                car["y"] < -margin or car["y"] > self.canvas_h + margin):
-                self.canvas.delete(car["item"])
-                self.cars.remove(car)
+           
 
     # ---------- Fungsi-fungsi kontrol simulasi ----------
     def start(self):
@@ -349,7 +298,7 @@ class TrafficLightGUI:
             self.update_lights()
             self.move_cars()
             self.spawn_car()
-            time.sleep(0.05)
+            time.sleep(0.016)  # ~60 FPS for smoother animation
 
 if __name__ == "__main__":
     # Jalankan program simulasi lampu lalu lintas
