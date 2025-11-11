@@ -1,4 +1,4 @@
-# 🚦 Program Simulasi Lampu Lalu Lintas 4-Arah (Straight-Only)
+# 🚦 Program Simulasi Lampu Lalu Lintas
 
 Program ini mensimulasikan **sistem lampu lalu lintas 4 arah (Utara, Timur, Selatan, Barat)** menggunakan Python dan **Tkinter**.  
 Pada versi ini, semua mobil hanya bergerak **lurus** melewati persimpangan, sehingga simulasi lebih sederhana dan fokus pada manajemen lampu lalu lintas.
@@ -120,6 +120,5 @@ Proyek ini bersifat **open-source** dan dapat digunakan untuk keperluan belajar 
 ## ✨ Kontributor
 
 Dibuat oleh **Rado Faristra Amsah**
-Sebagai proyek simulasi lalu lintas berbasis Python dengan mobil bergerak lurus.
 
 
